@@ -1,0 +1,8 @@
+
+[workspace]
+members = ["contracts/eqa_token", "contracts/collateral_manager", "contracts/liquidation_engine", "contracts/arbitrage_module", "contracts/governance"]
+
+[package]
+name = "equilibria-smart-contracts"
+version = "0.1.0"
+edition = "2021"
