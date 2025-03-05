@@ -3,7 +3,12 @@ use equilibria_smart_contracts::error::ContractError;
 use equilibria_smart_contracts::state::{TOKEN_STATE, BALANCES};
 
 pub fn calculate_dynamic_fee(market_price: Decimal) -> Decimal {
-    let deviation = (market_price - Decimal::one()).abs();
+    let deviation = if market_price > Decimal::one() {
+        market_price - Decimal::one()
+    } else {
+        Decimal::one() - market_price
+    };
+    
     if deviation > Decimal::percent(1) {
         Decimal::percent(5) // 5% fee when EQA deviates more than 1%
     } else {

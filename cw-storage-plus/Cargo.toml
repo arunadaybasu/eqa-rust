@@ -1,0 +1,9 @@
+[package]
+name = "cw-storage-plus"
+version = "1.0.1"
+edition = "2021"
+description = "Storage helpers for CosmWasm contracts"
+
+[dependencies]
+cosmwasm-std = "1.1.0"
+serde = { version = "1.0.144", default-features = false, features = ["derive"] }

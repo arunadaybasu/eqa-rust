@@ -2,7 +2,10 @@ use cosmwasm_std::{Addr, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use cosmwasm_std::Storage;
+// Remove the unused import
+// use cosmwasm_std::Storage;
+
+// Fix the import of cw_storage_plus
 use cw_storage_plus::{Item, Map};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
