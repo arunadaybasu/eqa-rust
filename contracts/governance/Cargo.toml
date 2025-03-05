@@ -1,0 +1,15 @@
+[package]
+name = "governance"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cosmwasm-std = "1.1.0"
+schemars = "0.8.10"
+serde = { version = "1.0.144", default-features = false, features = ["derive"] }
+thiserror = "1.0.31"
+cw-storage-plus = "1.0.1"
+equilibria-smart-contracts = { path = "../.." }
