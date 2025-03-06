@@ -3,20 +3,20 @@ mod tests {
     use cosmwasm_std::{Uint128, Decimal};
     
     #[test]
-    fn test_collateral_requirement() {
-        // 110% collateral requirement
-        let debt = Uint128::new(100);
+    fn test_collateralization_check() {
+        // 110% collateral requirement (110/100 = 1.1)
+        let collateral = Uint128::new(110);
+        let _debt = Uint128::new(100); // Added underscore prefix to acknowledge unused variable
         
-        // Calculate required collateral without division
-        let required_collateral = Uint128::new(110); // Hardcoded 110% of 100
+        // Check if a position is well-collateralized
+        let collateral_threshold = Uint128::new(110); // This is just the known threshold for test
         
-        // Well-collateralized (110 >= 110)
-        let collateral_good = Uint128::new(110);
-        assert!(collateral_good >= required_collateral);
+        // Test well-collateralized case
+        assert!(collateral >= collateral_threshold);
         
-        // Under-collateralized (109 < 110)
+        // Test under-collateralized case  
         let collateral_bad = Uint128::new(109);
-        assert!(collateral_bad < required_collateral);
+        assert!(collateral_bad < collateral_threshold);
     }
     
     #[test]

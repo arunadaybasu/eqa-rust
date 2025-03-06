@@ -9,8 +9,8 @@ pub fn execute_update_collateral(
     usdc_axelar: Uint128,
     usdc_noble: Uint128,
 ) -> Result<Response, ContractError> {
-    // In a real implementation, you would check if the caller is authorized
-    // For demonstration, we're omitting that check
+    // In a production system, you would add authorization checks here
+    // For example: if info.sender != admin { return Err(ContractError::Unauthorized {}); }
     
     COLLATERAL.update(deps.storage, |mut state| -> Result<_, ContractError> {
         state.usdc_axelar = usdc_axelar;

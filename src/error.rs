@@ -1,14 +1,14 @@
 use cosmwasm_std::StdError;
 use thiserror::Error;
 
-#[derive(Error, Debug, PartialEq)]
+#[derive(Error, Debug)]
 pub enum ContractError {
     #[error("{0}")]
     Std(#[from] StdError),
 
     #[error("Unauthorized")]
     Unauthorized {},
-
+    
     #[error("Custom Error: {msg}")]
     CustomError { msg: String },
     
@@ -18,6 +18,9 @@ pub enum ContractError {
     #[error("Invalid Price")]
     InvalidPrice {},
     
-    #[error("Operation Disabled")]
-    OperationDisabled {},
+    #[error("Oracle Error: {msg}")]
+    OracleError { msg: String },
+    
+    #[error("Liquidation Error: {msg}")]
+    LiquidationError { msg: String },
 }

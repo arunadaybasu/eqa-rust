@@ -4,7 +4,8 @@ members = [
   "contracts/collateral_manager", 
   "contracts/liquidation_engine", 
   "contracts/arbitrage_module", 
-  "contracts/governance"
+  "contracts/governance",
+  "contracts/eqa_oracle"
 ]
 
 [package]

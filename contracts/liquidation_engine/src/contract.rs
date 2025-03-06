@@ -1,9 +1,32 @@
-use cosmwasm_std::{DepsMut, Deps, Env, MessageInfo, Response, Uint128, StdResult};
+use cosmwasm_std::{
+    DepsMut, Deps, Env, MessageInfo, Response, Uint128, StdResult,
+    Addr, WasmQuery, QueryRequest, to_json_binary as to_binary, Decimal
+};
 use equilibria_smart_contracts::error::ContractError;
 use equilibria_smart_contracts::state::COLLATERAL;
 use cw_storage_plus::Item;
 
-use crate::LiquidationStatusResponse;
+use crate::state::{CONFIG, Config};
+use crate::{LiquidationStatusResponse, ConfigResponse};
+
+// Oracle query types
+#[derive(serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+struct OracleQuery {
+    get_price: GetPrice,
+}
+
+#[derive(serde::Serialize)]
+struct GetPrice {
+    denom: String,
+}
+
+#[derive(serde::Deserialize)]
+struct PriceResponse {
+    denom: String,
+    price: Decimal,
+    last_updated: u64,
+}
 
 const MIN_THRESHOLD: Item<u64> = Item::new("min_threshold");
 
@@ -75,5 +98,68 @@ pub fn query_liquidation_status(
         required_ratio: threshold,
         collateral_value: total_collateral_value,
         backed_value,
+    })
+}
+
+pub fn execute_update_config(
+    deps: DepsMut,
+    _env: Env,
+    info: MessageInfo,
+    oracle_address: Option<Addr>,
+    threshold_ratio: Option<u64>,
+    liquidation_fee: Option<u64>,
+    is_active: Option<bool>,
+) -> Result<Response, ContractError> {
+    let mut config = CONFIG.load(deps.storage)?;
+    
+    // Check if the sender is the admin
+    if info.sender != config.admin {
+        return Err(ContractError::Unauthorized {});
+    }
+    
+    // Update config values if provided
+    if let Some(oracle) = oracle_address {
+        config.oracle_address = Some(oracle);
+    }
+    
+    if let Some(ratio) = threshold_ratio {
+        if ratio < 100 {
+            return Err(ContractError::CustomError { 
+                msg: "Threshold ratio must be at least 100%".to_string() 
+            });
+        }
+        config.threshold_ratio = ratio;
+    }
+    
+    if let Some(fee) = liquidation_fee {
+        if fee > 20 {
+            return Err(ContractError::CustomError { 
+                msg: "Liquidation fee cannot exceed 20%".to_string() 
+            });
+        }
+        config.liquidation_fee = fee;
+    }
+    
+    if let Some(active) = is_active {
+        config.is_active = active;
+    }
+    
+    CONFIG.save(deps.storage, &config)?;
+    
+    Ok(Response::new()
+        .add_attribute("action", "update_config")
+        .add_attribute("admin", info.sender))
+}
+
+// Fix QueryConfig function which was missing
+pub fn query_config(deps: Deps) -> StdResult<ConfigResponse> {
+    let config = CONFIG.load(deps.storage)?;
+    
+    Ok(ConfigResponse {
+        admin: config.admin,
+        oracle_address: config.oracle_address,
+        threshold_ratio: config.threshold_ratio,
+        liquidation_fee: config.liquidation_fee,
+        is_active: config.is_active,
     })
 }

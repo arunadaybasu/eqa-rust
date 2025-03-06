@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_collateralization_requirement() {
         // 110% collateral requirement
-        let debt = Uint128::new(100);
+        let _debt = Uint128::new(100); // Prefix with _ to acknowledge it's unused
         
         // Calculate required collateral directly
         let required_collateral = Uint128::new(110); // 110% of 100 = 110

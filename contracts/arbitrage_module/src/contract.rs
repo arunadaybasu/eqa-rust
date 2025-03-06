@@ -42,7 +42,11 @@ pub fn execute_arbitrage(
     }
     
     // Calculate deviation from peg
-    let deviation = (target_price - PEG_TARGET).abs();
+    let deviation = if target_price > PEG_TARGET {
+        target_price - PEG_TARGET
+    } else {
+        PEG_TARGET - target_price
+    };
     
     // Simple reward calculation: reward = amount * deviation * reward_percentage 
     let reward_amount = amount.u128() as u64 * (deviation * reward_percentage).atomics().u128() as u64 / 1_000_000u64;
@@ -64,7 +68,12 @@ pub fn query_arbitrage_opportunity(
     let reward_percentage = REWARD_PERCENTAGE.load(deps.storage)?;
     
     // Calculate deviation from peg
-    let deviation = (current_price - PEG_TARGET).abs();
+    let deviation = if current_price > PEG_TARGET {
+        current_price - PEG_TARGET
+    } else {
+        PEG_TARGET - current_price
+    };
+    
     let opportunity_exists = deviation > Decimal::percent(1); // 1% deviation
     
     // For simplicity, we're setting a fixed optimal trade size
