@@ -1,5 +1,5 @@
 // This file provides mocks to simulate Terra Classic Oracle for testing
-use cosmwasm_std::{Deps, Decimal};
+use cosmwasm_std::{Deps, StdResult};
 
 // Mocked TerraQuerier for testing without the terra-cosmwasm dependency
 pub struct MockTerraQuerier {}
@@ -28,7 +28,7 @@ impl MockTerraQuerier {
         Self {}
     }
     
-    pub fn query_exchange_rate(&self, _base_denom: String, _quote_denom: String) -> Result<ExchangeRateResponse, cosmwasm_std::StdError> {
+    pub fn query_exchange_rate(&self, _base_denom: String, _quote_denom: String) -> StdResult<ExchangeRateResponse> {
         // In tests, always return a 1:1 rate for simplicity
         Ok(ExchangeRateResponse {
             exchange_rate: MockDecimal {

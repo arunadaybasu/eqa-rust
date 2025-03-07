@@ -8,19 +8,28 @@ pub enum ContractError {
 
     #[error("Unauthorized")]
     Unauthorized {},
-    
-    #[error("Custom Error: {msg}")]
-    CustomError { msg: String },
-    
-    #[error("Insufficient Collateral")]
-    InsufficientCollateral {},
-    
-    #[error("Invalid Price")]
+
+    #[error("Invalid funds")]
+    InvalidFunds {},
+
+    #[error("Invalid token")]
+    InvalidToken {},
+
+    #[error("Invalid price")]
     InvalidPrice {},
+
+    #[error("Invalid amount")]
+    InvalidAmount {},
+
+    #[error("Insufficient collateral: required {required}, available {available}")]
+    InsufficientCollateral { required: String, available: String },
     
-    #[error("Oracle Error: {msg}")]
-    OracleError { msg: String },
+    #[error("Collateralization below minimum threshold")]
+    CollateralizationTooLow {},
     
-    #[error("Liquidation Error: {msg}")]
-    LiquidationError { msg: String },
+    #[error("Operation not supported in the current market conditions")]
+    UnsupportedMarketCondition {},
+    
+    #[error("Custom error: {msg}")]
+    CustomError { msg: String },
 }

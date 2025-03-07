@@ -1,43 +1,21 @@
-# Equilibria (EQA) Smart Contracts
+# Equilibria Finance Smart Contracts
 
-This repository contains the complete implementation of the Equilibria (EQA) stablecoin system for Terra blockchain.
+This repository contains the core smart contracts for the Equilibria (EQA) stablecoin protocol.
 
 ## Project Structure
 
 ```
-equilibria-smart-contracts/
-├── src/
-│   ├── lib.rs        # Main library exports
-│   ├── error.rs      # Error handling
-│   └── state.rs      # State management
-├── contracts/
-│   ├── eqa_token/            # EQA token implementation
-│   │   ├── src/
-│   │   │   ├── lib.rs        # Entry points and messages
-│   │   │   └── contract.rs   # Business logic
-│   │   └── Cargo.toml
-│   ├── collateral_manager/   # Collateral management
-│   │   ├── src/
-│   │   │   ├── lib.rs        # Entry points and messages
-│   │   │   └── contract.rs   # Business logic
-│   │   └── Cargo.toml
-│   ├── liquidation_engine/   # Liquidation handling
-│   │   ├── src/
-│   │   │   ├── lib.rs        # Entry points and messages
-│   │   │   └── contract.rs   # Business logic
-│   │   └── Cargo.toml
-│   ├── arbitrage_module/     # Arbitrage incentives
-│   │   ├── src/
-│   │   │   ├── lib.rs        # Entry points and messages
-│   │   │   └── contract.rs   # Business logic
-│   │   └── Cargo.toml
-│   └── governance/           # DAO governance
-│       ├── src/
-│       │   ├── lib.rs        # Entry points and messages
-│       │   ├── contract.rs   # Business logic
-│       │   └── state.rs      # Governance state
-│       └── Cargo.toml
-└── Cargo.toml
+eqa-rust/
+├── contracts/              # Smart contracts
+│   ├── eqa_token/          # EQA token contract
+│   ├── collateral_manager/ # Collateral management
+│   ├── liquidation_engine/ # Handles liquidations
+│   ├── arbitrage_module/   # Arbitrage incentives
+│   ├── governance/         # DAO governance
+│   ├── eqa_oracle/         # Price oracle
+│   └── registry/           # Contract registry
+├── src/                    # Common code shared across contracts
+└── tests/                  # Integration tests
 ```
 
 ## Components
@@ -85,6 +63,32 @@ terrad tx wasm store equilibria_smart_contracts.wasm --from mywallet --gas auto 
 ```bash
 terrad tx wasm execute <CONTRACT_ADDRESS> '{"mint": {"amount":"100", "market_price":"1.02"}}' --from mywallet --gas auto --fees 50uluna
 ```
+
+## Running Tests
+
+Due to some complexities with test dependencies, it's recommended to run tests using the provided batch script:
+
+```
+./clean_test.bat
+```
+
+Alternatively, you can run individual tests with:
+
+```
+cargo test --test simplified_tests
+cargo test --test basic_tests
+cargo test --test cross_chain_test
+cargo test --test collateral_registry_test
+```
+
+## Known Issues
+
+- Some integration tests may face linking issues on Windows. Using the batch script helps mitigate these problems.
+- Cross-chain functionality requires proper mocking when running tests.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Key Features
 

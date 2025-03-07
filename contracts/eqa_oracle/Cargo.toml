@@ -7,10 +7,15 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-cosmwasm-std = "1.1.0"
+cosmwasm-std = "1.0.0"
 schemars = "0.8.10"
 serde = { version = "1.0.144", default-features = false, features = ["derive"] }
 thiserror = "1.0.31"
-cw-storage-plus = "1.0.1"
-terra-cosmwasm = "2.2.0"
+cw-storage-plus = "0.13.4"
+terra-cosmwasm = { version = "2.2.0", optional = true }
 equilibria-smart-contracts = { path = "../.." }
+
+[features]
+# Make terra-cosmwasm an optional dependency that's only used in production
+default = []
+terra-integration = ["terra-cosmwasm"]

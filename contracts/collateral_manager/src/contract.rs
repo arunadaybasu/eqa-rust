@@ -1,9 +1,8 @@
-use cosmwasm_std::{DepsMut, Deps, Env, MessageInfo, Response, Uint128, Addr};
+use cosmwasm_std::{DepsMut, Deps, Env, MessageInfo, Response, Uint128, StdResult, Addr};
 use equilibria_smart_contracts::error::ContractError;
 use equilibria_smart_contracts::state::{COLLATERAL, CollateralState};
-use cw_storage_plus::Item;
 
-pub const ADMIN: Item<Addr> = Item::new("admin");
+use crate::state::ADMIN;
 
 pub fn initialize(
     deps: DepsMut,

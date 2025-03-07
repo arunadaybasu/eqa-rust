@@ -8,24 +8,30 @@ mod contract;
 mod cw20_handler;
 mod cross_chain;
 mod state;
+mod network_integration;
 
 use crate::state::REGISTRY_ADDRESS;
 
 #[entry_point]
 pub fn instantiate(
-    deps: DepsMut,
-    _env: Env,
+    mut deps: DepsMut,
+    env: Env,
     info: MessageInfo,
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
     // Save registry address
     REGISTRY_ADDRESS.save(deps.storage, &msg.registry_address)?;
     
-    // Initialize the contract
-    contract::initialize(deps, info, msg.admin)?;
+    // Initialize the contract using branch to avoid cloning
+    let init_response = contract::initialize(deps.branch(), info.clone(), msg.admin)?;
     
-    Ok(Response::new()
-        .add_attribute("action", "instantiate")
+    // Register with cross-chain gateways if applicable
+    if msg.register_cross_chain.unwrap_or(false) {
+        let register_response = cross_chain::register_callbacks(deps, env)?;
+        return Ok(init_response.add_submessages(register_response.messages));
+    }
+    
+    Ok(init_response
         .add_attribute("registry_address", msg.registry_address))
 }
 

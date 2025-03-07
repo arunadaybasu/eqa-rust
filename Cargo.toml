@@ -5,7 +5,8 @@ members = [
   "contracts/liquidation_engine", 
   "contracts/arbitrage_module", 
   "contracts/governance",
-  "contracts/eqa_oracle"
+  "contracts/eqa_oracle",
+  "contracts/registry"
 ]
 
 [package]
@@ -22,3 +23,9 @@ thiserror = "1.0.31"
 
 [dev-dependencies]
 serde_json = "1.0"
+cosmwasm-schema = "1.1.0"
+cosmwasm-vm = "1.1.0"
+cosmwasm-storage = "1.0.0"
+cw20 = "0.13.4"
+registry = { path = "contracts/registry" }
+collateral_manager = { path = "contracts/collateral_manager" }

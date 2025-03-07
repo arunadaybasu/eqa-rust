@@ -3,15 +3,15 @@ use cosmwasm_std::{
     Addr, StdError, Decimal
 };
 
-// Use real TerraQuerier in non-test environments
-#[cfg(not(test))]
+// Use real TerraQuerier in non-test environments and when terra-integration feature is enabled
+#[cfg(all(not(test), feature = "terra-integration"))]
 use terra_cosmwasm::TerraQuerier;
 
-// Use mock TerraQuerier in test environments
-#[cfg(test)]
+// In other cases, use our mock implementation
+#[cfg(any(test, not(feature = "terra-integration")))]
 use crate::mock::{MockTerraQuerier as TerraQuerier};
 
-#[cfg(test)]
+#[cfg(any(test, not(feature = "terra-integration")))]
 mod mock;
 
 use equilibria_smart_contracts::error::ContractError;

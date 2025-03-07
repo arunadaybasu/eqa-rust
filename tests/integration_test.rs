@@ -1,14 +1,12 @@
 use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
 use cosmwasm_std::{Decimal, Uint128};
-
 use equilibria_smart_contracts::state::{TokenState, CollateralState, COLLATERAL};
 
 #[test]
 fn test_minting_and_redemption() {
-    let _deps = mock_dependencies(); // Prefix with underscore to mark as intentionally unused
+    let _deps = mock_dependencies();
     let _env = mock_env();
     let admin_info = mock_info("admin", &[]);
-    let _user_info = mock_info("user", &[]);
     
     // Initialize a mock TokenState directly
     let _token_state = TokenState {
@@ -19,7 +17,7 @@ fn test_minting_and_redemption() {
         decimals: 6,
     };
     
-    // Save it to storage - removed, just simulate with local variables
+    // Simulate with local variables
     let mut token_balance = Uint128::new(100_000_000); // 100 with 6 decimals
     let fee = Decimal::percent(1); // 1% fee
     let fee_amount = token_balance * fee;
@@ -40,8 +38,6 @@ fn test_minting_and_redemption() {
 #[test]
 fn test_collateral_and_liquidation() {
     let mut deps = mock_dependencies();
-    let _env = mock_env();
-    let _admin_info = mock_info("admin", &[]);
     
     // Initialize collateral state directly
     let collateral_state = CollateralState {
@@ -60,7 +56,7 @@ fn test_collateral_and_liquidation() {
     assert_eq!(stored_collateral.total_locked, Uint128::new(100_000_000_000));
     
     // Test liquidation logic
-    let threshold_ratio = 110u64; // 110% collateralization required - fixed type
+    let threshold_ratio = 110u64; // 110% collateralization required
     
     // Calculate required collateral for 90,000 EQA
     let eqa_supply = Uint128::new(90_000_000_000); 
